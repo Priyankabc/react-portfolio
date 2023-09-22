@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { createNewPost, editUserDetails, getIndividualPostDeatils } from '../Services/PostApi';
 import { Button, Col, Container, Form, Row, Toast } from 'react-bootstrap';
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import PostDetails from './PostDetails';
 import { toast } from 'react-toastify';
+import { editUserDetails, getIndividualUserDeatils } from '../Services/UserApi';
 
 export default function EditUserDetails() {
   const navigate = useNavigate();
+  const maxDate = new Date();
     const {userid} = useParams();
     const[postDetailes, setPostDetails] = useState({});
     const[loading, setLoading] = useState(true);
@@ -42,7 +42,7 @@ export default function EditUserDetails() {
   
     const getPostResponse = async() => {
       try{
-        const postResponse = await getIndividualPostDeatils(userid);
+        const postResponse = await getIndividualUserDeatils(userid);
         console.log(postResponse);
         setPostDetails(postResponse);
         setFormData(postResponse);
@@ -54,9 +54,8 @@ export default function EditUserDetails() {
     }
     const onchangePostData = (e) => {
       const { name, value } = e.target;
-      if (name.startsWith('location.')) {
-        // Handle nested fields within location object
-        const locationField = name.split('.')[1];
+      if (name.startsWith("location.")) {
+        const locationField = name.split(".")[1];
         setFormData((prevData) => ({
           ...prevData,
           location: {
@@ -70,6 +69,13 @@ export default function EditUserDetails() {
           [name]: value,
         }));
       }
+  
+      // Onchange validation
+      const validationErrors = validateField(name, value);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: validationErrors[name],
+      }));
     };
   
   
@@ -80,7 +86,7 @@ export default function EditUserDetails() {
       if (Object.keys(validationErrors).length === 0) {
         await editUserDetails(userid,formData)
         toast.success('User Details Updated Successfully!');
-        navigate('/postlist');
+        navigate('/userlist');
       } else {
         setErrors(validationErrors);
       }
@@ -89,38 +95,71 @@ export default function EditUserDetails() {
     };
 
 
-    const validateForm = (userData) => {
-        let errors = {}
-        if (!userData.firstName) {
-          errors.firstName = "FirstName is required";
-        } else if ((userData.firstName).length <= 4) {
-          errors.firstName = "FirstName should be atleast of 4 letter";
-        }
-        if (!userData.lastName) {
-          errors.lastName = "LastName is required";
-        }
-        if (!userData.title) {
-          errors.title = "Title is required";
-        }
-        if (!userData.picture) {
-          errors.picture = "Picture is required";
-        }
-        if (!userData.email) {
-          errors.email = 'Email is required';
-        } else if (!isValidEmail(userData.email)) {
-          errors.email = 'Invalid email format';
-        }
-        if (!userData.phone) {
-          errors.phone = 'Phone number is required';
-        } else if (!/^\d+$/.test(userData.phone)) {
-          errors.phone = 'Phone number must contain only digits';
-        } else if (userData.phone.length <= 8) {
-          errors.phone = 'Phone number must be at least 8 digits long';
-        }
-    
-        return errors;
+    const validateField = (name, value) => {
+      let errors = {};
+  
+      switch (name) {
+        case "firstName":
+          if (!value) {
+            errors.firstName = "First Name is required";
+          } else if (value.length <= 4) {
+            errors.firstName = "First Name should be at least 4 characters";
+          }
+          break;
+        case "lastName":
+          if (!value) {
+            errors.lastName = "Last Name is required";
+          }
+          break;
+        case "email":
+          if (!value) {
+            errors.email = "Email is required";
+          } else if (!isValidEmail(value)) {
+            errors.email = "Invalid email format";
+          }
+          break;
+        case "phone":
+          if (!value) {
+            errors.phone = "Phone number is required";
+          } else if (!/^\d+$/.test(value)) {
+            errors.phone = "Phone number must contain only digits";
+          } else if (value.length <= 8) {
+            errors.phone = "Phone number must be at least 8 digits long";
+          }
+          break;
+        case "picture":
+          if (!value) {
+            errors.picture = "Picture is required";
+          }
+          break;
+        default:
+          break;
       }
-    
+  
+      return errors;
+    };
+  
+    const validateForm = (userData) => {
+      let formErrors = {};
+  
+      // Validate each field in the form
+      for (let fieldName in userData) {
+        if (fieldName === "location") {
+          for (let locationField in userData.location) {
+            const fieldErrors = validateField(
+              `location.${locationField}`,
+              userData.location[locationField]
+            );
+            formErrors = { ...formErrors, ...fieldErrors };
+          }
+        } else {
+          const fieldErrors = validateField(fieldName, userData[fieldName]);
+          formErrors = { ...formErrors, ...fieldErrors };
+        }
+      }
+  
+      return formErrors;
+    };
       const isValidEmail = (email) => {
         const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
         return emailPattern.test(email);
@@ -137,7 +176,7 @@ export default function EditUserDetails() {
     }
   return (
     <div>
-     <Container>
+     <Container className="main-page">
         <Row>
         <h1 className="main-title">Update User Deatails</h1>
         </Row>
@@ -147,7 +186,7 @@ export default function EditUserDetails() {
               <Row>
                 <Col as={Col} md="6">
                   <Form.Group controlId="title">
-                    <Form.Label>Title <span className="colorred">*</span></Form.Label>
+                    <Form.Label>Title</Form.Label>
                     <Form.Select aria-label="Default select example" value={formData.title}
                      name="title"
                      onChange={onchangePostData}>
@@ -209,24 +248,26 @@ export default function EditUserDetails() {
                       value={formData.dateOfBirth}
                       name="dateOfBirth"
                       onChange={onchangePostData}
+                      max={maxDate.toISOString().split('T')[0]}
                     />
                   </Form.Group>
                 </Col>
                 <Col as={Col} md="6">
                   <Form.Group controlId="picture">
                     <Form.Label>Picture <span className="colorred">*</span> </Form.Label>
-                    {/* <Form.Control
+                    <img src={formData.picture} alt="userprofile" />
+                    <Form.Control
                       type="file"
                       accept="image/*"
                       name="picture"
                       onChange={onchangePostData}
-                    /> */}
-                     <Form.Control
+                    />
+                     {/* <Form.Control
                       type="text"
                       name="picture"
                       value={formData.picture}
                       onChange={onchangePostData}
-                    />
+                    /> */}
                     {errors.picture && <p className="error">{errors.picture}</p>}
                   </Form.Group>
                 </Col>

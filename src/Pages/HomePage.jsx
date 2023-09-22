@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { getPostList } from '../Services/PostApi';
+import {getUserList } from '../Services/UserApi';
 
 export default function HomePage() {
 
@@ -12,12 +12,12 @@ export default function HomePage() {
   },[])
 
   const getUserDetails = async() =>{
-    const userList = await getPostList(1, 8);
+    const userList = await getUserList(1, 8);
     setUserData(userList.data);
     console.log(userList.data);
   }
   return (
-    <div>
+    <div className="main-page">
       <div className="banner-hero-img">
       <Container>
         <Row>

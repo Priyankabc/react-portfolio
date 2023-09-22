@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { deleteUserDetails, getPostList } from '../Services/PostApi';
-import { Button, Container, Row, Table } from 'react-bootstrap';
+import { Button, Col, Container, Row, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrashCanArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { deleteUserDetails, getUserList } from '../Services/UserApi';
 
-export default function PostList() {
+export default function UserList() {
   const [postData, setPostData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
@@ -13,11 +15,11 @@ export default function PostList() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPostList();
+    fetchUserList();
   }, [currentPage]);
 
-    const fetchPostList = async () => {
-      const response = await getPostList(currentPage, itemsPerPage);
+    const fetchUserList = async () => {
+      const response = await getUserList((currentPage-1), itemsPerPage);
       console.log(response);
       const totalItems = response.total;
       setPostData(response.data);
@@ -44,8 +46,30 @@ export default function PostList() {
         <Container>
           <Row>
         <h1 className="main-title">Users List</h1>
-        <Link to={'/createpost/'}><Button variant="primary" className="create-user">Create User</Button></Link>
-        <Table className="user-lists">
+        <Link to={'/createnewuser/'}><Button variant="primary" className="create-user">Create User</Button></Link>
+        </Row>
+        <Row>
+        {
+            postData && postData.map((user, index)=>(
+            
+            <Col md={3} key={index+1}>
+                  <div className="userdetails">
+                  <Link to={`/userdetail/${user.id}`}>
+                    <img src={user.picture} alt="user profile"/>
+                      <h4>{user.title} {user.firstName} {user.lastName}</h4>
+                    <p>For every expert, there is an equal and opposite expert.</p>
+                    </Link>
+                    <div className="edit-delete-btns">
+                    <Link to={`/edituser/${user.id}`} className="edit-icon"><FontAwesomeIcon icon={faEdit} /></Link>
+                    <FontAwesomeIcon icon={faTrashCanArrowUp}  onClick={()=>deleteUser(user.id)} className="delete-icon"/>
+                    </div>
+                </div>
+                
+              
+            </Col>
+          ))
+        }
+        {/* <Table className="user-lists">
       <thead>
         <tr>
           <th>SL No</th>
@@ -74,7 +98,7 @@ export default function PostList() {
         }
      
       </tbody>
-    </Table>
+    </Table> */}
        
     </Row>
     <Row>
@@ -97,67 +121,3 @@ export default function PostList() {
 }
 
 
-
-
-
-
-
-// import React, { useEffect, useState } from 'react';
-
-// export default function FetchApi() {
-//   const [ApiData, setApiData] = useState([]);
-//   const [Currentpage, setCurrentPage] = useState(1);
-//   const itemsperpage = 10;
-//   const [totalpage, setTotalPage] = useState(1);
-//   const [FormulaData, setFormulaData] = useState(1);
-
-//   useEffect(() => {
-//     fetchData();
-//   }, [Currentpage]);
-
-//   async function fetchData() {
-//     try {
-//       const apiresponse = await fetch(`https://dummyjson.com/posts?skip=${(Currentpage - 1) * itemsperpage}&limit=${itemsperpage}`);
-//       const storedata = await apiresponse.json();
-//       console.log(storedata);
-//       setApiData(storedata.posts);
-//       setTotalPage(storedata.total);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-
-//   useEffect(() => {
-//     setFormulaData(Math.ceil(totalpage / itemsperpage));
-//   }, [totalpage, itemsperpage]);
-
-//   function handlePageChange(newPage) {
-//     setCurrentPage(newPage);
-//   }
-
-//   return (
-//     <div>
-//       <h1>Fetch Api</h1>
-//       <ul>
-//         {ApiData.map((posts, index) => (
-//           <li key={posts.id}>
-//             {posts.id}-{posts.title} - <p>{posts.body}</p>
-//           </li>
-//         ))}
-//       </ul>
-
-//       <div className="pagination">
-//         {Array.from({ length: FormulaData }, (_, index) => (      /**** Here Array.from() is used for creating new array and {length:Formuldata} is object literal total number o
-//                 f pages assign and (_,index) it is arrow function used for mappaing data***** */
-//           <button
-//             key={index}
-//             onClick={() => handlePageChange(index + 1)}
-//             className={Currentpage === index + 1 ? 'active' : ''}
-//           >
-//             {index + 1}
-//           </button>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }

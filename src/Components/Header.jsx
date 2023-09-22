@@ -13,8 +13,8 @@ export default function Header() {
           <Navbar.Brand href="/"><FontAwesomeIcon icon={faBookOpenReader} /> <span>Courses</span></Navbar.Brand>
           <Nav className="mr-auto">
             <Link to="/">Home</Link>
-            <Link to="/postlist">Users</Link>
-            <Link to="/" className="login-btn">Login</Link>
+            <Link to="/userlist">Users</Link>
+            {/* <Link to="/" className="login-btn">Login</Link> */}
           </Nav>
         </Container>
       </Navbar>

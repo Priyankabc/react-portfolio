@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { getIndividualPostDeatils } from '../Services/PostApi';
+import { getIndividualUserDeatils } from '../Services/UserApi';
 import { Col, Container, Row } from 'react-bootstrap';
 
-export default function PostDetails() {
-  const {postid} = useParams();
+export default function UserDetails() {
+  const {userid} = useParams();
   const[postDeatils, setPostDeatils] = useState({});
   const[loading, setLoading] = useState(true);
   useEffect(()=>{
@@ -13,7 +13,7 @@ export default function PostDetails() {
 
   const getPostResponse = async() => {
     try{
-      const postResponse = await getIndividualPostDeatils(postid);
+      const postResponse = await getIndividualUserDeatils(userid);
       console.log(postResponse);
       setPostDeatils(postResponse)
     }catch(error){
