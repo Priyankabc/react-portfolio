@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 import Footer from './Components/Footer';
 import React, { Suspense } from 'react';
+import { Container, Row } from 'react-bootstrap';
 
 const HomePage = React.lazy(() => import('./Pages/HomePage'));
 const UserList = React.lazy(() => import('./Pages/UserList'));
