@@ -243,3 +243,23 @@ Button.submit-form-btn{
     color: #ee1414;
     font-size: 18px;
 }
+.updateuserprofile{
+    width: 15%;
+    float: right;
+    border-radius: 8px;
+    margin-top: -70px;
+}
+.image-upload input{
+    width: 80%;
+}
+.viewmore{
+    background-color: #FF9F67;
+    border: 1px solid #FF9F67;
+    padding: 8px 10px 4px;
+    border-radius: 3px;
+}
+.viewmore:hover, .banner-btn:hover{
+    background-color: #eb8e58 !important;
+    border: 1px solid #eb8e58 !important;
+}
+

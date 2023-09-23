@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { createNewUser } from "../Services/UserApi";
+import { createNewUser, imageUpload } from "../Services/UserApi";
+import axios from "axios";
 
 export default function CreateUser() {
   const navigate = useNavigate();
@@ -51,8 +52,6 @@ export default function CreateUser() {
         [name]: value,
       }));
     }
-
-    // Onchange validation
     const validationErrors = validateField(name, value);
     setErrors((prevErrors) => ({
       ...prevErrors,
@@ -60,15 +59,25 @@ export default function CreateUser() {
     }));
   };
 
-  const onchangeImage = (e) => {
-    const { name, files } = e.target;
-    console.log(e);
-    console.log(e.target.files[0]);
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: files[0].name,
-    }));
+
+  const onchangeImage = async (e) => {
+    try {
+      const { name, files } = e.target;
+      const imagePath = e.target.files[0];
+      const formData = new FormData();
+      formData.append("file", imagePath);
+      formData.append("upload_preset", "sak4m8sm");
+      const imageSecureUrl = await imageUpload(formData)
+      console.log(imageSecureUrl.secure_url);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: imageSecureUrl.secure_url,
+      }));
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
+  
 
   const submitPostData = async (e) => {
     e.preventDefault();

@@ -13,3 +13,7 @@ export const postsUrl = axios.create({
       return Promise.reject(error);
     }
   );
+
+  export const uploadImageUrl = axios.create({
+    baseURL: 'https://api.cloudinary.com/v1_1/dinxlhjec/image/'
+  });

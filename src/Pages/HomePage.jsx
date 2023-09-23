@@ -25,7 +25,7 @@ export default function HomePage() {
             <div className="banner_content">
               <h1>Online learning Platform</h1>
               <p>Build skills with courses, certificates, and degrees online from world-class universities and companies</p>
-              <Link to={'/createpost/'}><Button className="btn banner-btn">Create Profile</Button></Link>
+              <Link to={'/createnewuser/'}><Button className="btn banner-btn">Create Profile</Button></Link>
           </div>
           </Col>
         </Row>
@@ -47,7 +47,7 @@ export default function HomePage() {
                           <img src={users.picture} alt="user profile"/>
                           <h4>{users.firstName} {users.lastName}</h4>
                           <p>For every expert, there is an equal and opposite expert.</p>
-
+                          <Link to={`/userdetail/${users.id}`}><button className="btn-sm viewmore">View More</button></Link>
                         </div>
                       </Col>
                         ))

@@ -1,4 +1,4 @@
-import { postsUrl } from "../Constants/BaseUrl";
+import { postsUrl, uploadImageUrl } from "../Constants/BaseUrl";
 
 export const getUserList = async (currentPage, itemsPerPage) => {
     try {
@@ -12,7 +12,6 @@ export const getUserList = async (currentPage, itemsPerPage) => {
   export const getIndividualUserDeatils = async (userId) => {
     try {
       const response = await postsUrl.get(`/user/${userId}`);
-      // console.log(response.data, "checkapi")
       return response.data;
     } catch (error) {
       throw error;
@@ -22,7 +21,6 @@ export const getUserList = async (currentPage, itemsPerPage) => {
   export const createNewUser = async (postData) => {
     try {
       const response = await postsUrl.post(`/user/create`, postData);
-      console.log(response.data, "check submit data")
       return response.data;
     } catch (error) {
       throw error;
@@ -32,7 +30,6 @@ export const getUserList = async (currentPage, itemsPerPage) => {
   export const editUserDetails = async (userId,userData) => {
     try {
       const response = await postsUrl.put(`/user/${userId}`, userData);
-      console.log(response.data, "check submit data")
       return response.data;
     } catch (error) {
       throw error;
@@ -42,7 +39,17 @@ export const getUserList = async (currentPage, itemsPerPage) => {
   export const deleteUserDetails = async (userId) => {
     try {
       const response = await postsUrl.delete(`/user/${userId}`);
-      console.log(response.data, "check submit data")
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+  export const imageUpload = async (uploadImgData) => {
+    try {
+      const response = await uploadImageUrl.post(`/upload/`, uploadImgData);
+      console.log(response.data, "image uploaded")
       return response.data;
     } catch (error) {
       throw error;

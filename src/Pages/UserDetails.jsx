@@ -23,7 +23,13 @@ export default function UserDetails() {
     }
   }
   if(loading){
-    return <h3>Loading</h3>
+    return (
+      <Container>
+        <Row>
+          <h1 className="main-title">Loading</h1>
+        </Row>
+      </Container>
+    );
   }
   return (
     <div className="main-page">
