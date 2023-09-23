@@ -28,7 +28,7 @@ function App() {
         <BrowserRouter>
         <ToastContainer />
         <Header/>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Container><Row>Loading...</Row></Container>}>
           <Routes>
             <Route path="/" element={<HomePage/>}/>
             <Route path='/userlist' element={<UserList/>} />
