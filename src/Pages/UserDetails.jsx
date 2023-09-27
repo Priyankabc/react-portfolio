@@ -35,7 +35,6 @@ export default function UserDetails() {
     <div className="main-page">
        <Container>
         <Row>
-       
         <Col md={3}></Col>
         <Col md={6}>
         <h1 className="main-title"> User Deatails</h1>

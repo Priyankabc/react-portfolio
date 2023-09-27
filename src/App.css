@@ -5,7 +5,7 @@ body, *{
     margin: 54px 0 80px;
 }
 .main-page{
-    min-height: 90vh;
+    min-height: 100vh;
 }
 .post-lists td img{
     width: 84px;
@@ -80,7 +80,7 @@ h1.main-title{
     padding: 9px 20px 7px;
     font-size: 16px;
     font-weight: 500;
-    margin: 8px 0;
+    margin: 32px 0 8px;
     float: right;
     border-radius: 4px;
 }
@@ -161,6 +161,7 @@ Button.submit-form-btn{
 .user-detail-pg img{
     border-radius: 50px;
     margin: 14px 0;
+    width: 100%;
 }
 .users-profile{
     display: flex;
@@ -177,6 +178,10 @@ Button.submit-form-btn{
 .user-content p span{
     font-weight: 700;
     margin-right: 10px;
+}
+.main-page .users-list-row{
+    margin-left: -30px;
+    margin-right: -30px;
 }
 .banner-btn{
     background: #FF9F67 !important;
@@ -210,7 +215,7 @@ Button.submit-form-btn{
     box-shadow: rgb(149 157 165 / 15%) 0px 8px 24px;
     padding: 32px 34px 35px;
     margin: 20px 20px 80px;
-    min-height: 324px;
+    min-height: 282px;
     border-radius: 8px;
 
 }
@@ -225,9 +230,9 @@ Button.submit-form-btn{
 }
 .userdetails h4{
     text-transform: capitalize;
-    font-size: 22px;
-    line-height: 31px;
-    font-weight: 600;
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 700;
 }
 .edit-delete-btns{
     border-top: 1px solid #ccc;
@@ -262,4 +267,6 @@ Button.submit-form-btn{
     background-color: #eb8e58 !important;
     border: 1px solid #eb8e58 !important;
 }
-
+  input[type="file"]::file-selector-button {
+    padding: 10px;
+  }

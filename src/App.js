@@ -3,16 +3,12 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Header from './Components/Header';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import PostList from './Pages/PostList';
-// import HomePage from './Pages/HomePage';
-// import PostDetails from './Pages/PostDetails';
-// import CreatePost from './Pages/CreatePost';
-// import EditUserDetails from './Pages/EditUserDetails';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 import Footer from './Components/Footer';
 import React, { Suspense } from 'react';
 import { Container, Row } from 'react-bootstrap';
+
 
 const HomePage = React.lazy(() => import('./Pages/HomePage'));
 const UserList = React.lazy(() => import('./Pages/UserList'));
@@ -29,7 +25,7 @@ function App() {
         <BrowserRouter>
         <ToastContainer />
         <Header/>
-        <Suspense fallback={<Container><Row>Loading...</Row></Container>}>
+        <Suspense fallback={<Container className="main-page"><Row>Loading...</Row></Container>}>
           <Routes>
             <Route path="/" element={<HomePage/>}/>
             <Route path='/userlist' element={<UserList/>} />

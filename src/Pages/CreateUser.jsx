@@ -269,6 +269,7 @@ export default function CreateUser() {
                       accept="image/*"
                       name="picture"
                       onChange={onchangeImage}
+                      
                     />
                     {/* <Form.Control
                       type="text"

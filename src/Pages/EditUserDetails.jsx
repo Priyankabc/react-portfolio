@@ -400,7 +400,7 @@ export default function EditUserDetails() {
               <Button type="submit" className="submit-form-btn">
                 Submit Form
               </Button>
-              <Link to={"/postlist/"}>
+              <Link to={"/userlist/"}>
                 <Button className="submit-form-btn">Back</Button>
               </Link>
             </Form>

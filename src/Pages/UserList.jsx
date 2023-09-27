@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCanArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { deleteUserDetails, getUserList } from '../Services/UserApi';
+import ConfirmationDialog from '../Components/ConfirmationDialog';
 
 export default function UserList() {
   const [postData, setPostData] = useState([]);
@@ -13,6 +14,8 @@ export default function UserList() {
   const itemsPerPage = 20;
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
     fetchUserList();
@@ -31,13 +34,33 @@ export default function UserList() {
     };
 
     /*********************  delete function ***************************/
-    const deleteUser = async(userId) =>{
-        console.log(userId);
-        alert("Are you sure you want to delete this user details?");
-        await deleteUserDetails(userId);
-        toast.success("User profile deleted successfully ");
-        navigate('/postlist');
-    }
+    // const deleteUser = async(userId) =>{
+    //     console.log(userId);
+    //     alert("Are you sure you want to delete this user details?");
+    //     await deleteUserDetails(userId);
+    //     toast.success("User profile deleted successfully ");
+    //     navigate('/postlist');
+    // }
+
+    const handleDeleteClick = (userId) => {
+      console.log('testeclick');
+      setSelectedUserId(userId);
+      setIsModalOpen(true);
+    };
+  
+    const handleConfirmDelete = async() => {
+      console.log(`Deleted user with ID: ${selectedUserId}`);
+      setIsModalOpen(false);
+      await deleteUserDetails(selectedUserId);
+      toast.success("User profile deleted successfully ");
+      window.location.reload();
+    };
+  
+    const handleCloseModal = () => {
+      setSelectedUserId(null);
+      setIsModalOpen(false);
+    };
+
 
     
   return (
@@ -45,10 +68,15 @@ export default function UserList() {
     <div className="main-page">
         <Container>
           <Row>
-        <h1 className="main-title">Users List</h1>
-        <Link to={'/createnewuser/'}><Button variant="primary" className="create-user">Create User</Button></Link>
+            <Col md={6}>
+             <h1 className="main-title">Users List</h1>
+            </Col>
+            <Col md={6}>
+            <Link to={'/createnewuser/'}><Button variant="primary" className="create-user">Create User</Button></Link>
+            </Col>
         </Row>
-        <Row>
+        <hr></hr>
+        <Row className="users-list-row">
         {
             postData && postData.map((user, index)=>(
             
@@ -61,7 +89,8 @@ export default function UserList() {
                     </Link>
                     <div className="edit-delete-btns">
                     <Link to={`/edituser/${user.id}`} className="edit-icon"><FontAwesomeIcon icon={faEdit} /></Link>
-                    <FontAwesomeIcon icon={faTrashCanArrowUp}  onClick={()=>deleteUser(user.id)} className="delete-icon"/>
+                    <span onClick={() => handleDeleteClick(user.id)}><FontAwesomeIcon icon={faTrashCanArrowUp}  className="delete-icon"/></span>
+              
                     </div>
                 </div>
                 
@@ -101,6 +130,7 @@ export default function UserList() {
     </Table> */}
        
     </Row>
+    
     <Row>
           <div className="pagination">
             {Array.from({ length: totalPages }, (_, index) => (
@@ -116,8 +146,16 @@ export default function UserList() {
 
         </Row>
         </Container>
+        <ConfirmationDialog
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
+    
   )
 }
+
+
 
 
